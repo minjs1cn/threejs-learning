@@ -7,7 +7,8 @@ export const routes: RouteRecordRaw[] = Object.keys(files).map(key => {
 
 	return {
 		name,
-		path: name === 'index' ? '/' : '/' + name,
+		path:
+			name === '404' ? '/:pathMatch(.*)*' : name === 'Home' ? '/' : '/' + name,
 		component: () => import(`./pages/${name}.vue`),
 		meta: {
 			title: name.replace(/^\w/, c => c.toUpperCase()),
@@ -15,7 +16,10 @@ export const routes: RouteRecordRaw[] = Object.keys(files).map(key => {
 	};
 });
 
-export const routesWithoutHome = routes.filter(route => route.name !== 'index');
+export const routesWithoutHome = [
+	...routes.filter(route => route.name === 'Home'),
+	...routes.filter(route => route.name !== 'Home' && route.name !== '404'),
+];
 
 export const router = createRouter({
 	history: createWebHashHistory(),

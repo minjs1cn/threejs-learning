@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from '@vue/runtime-core';
-import * as THREE from 'three';
 import { useThree } from '../hooks';
 
-const { body, onUpdate, addChild, animation, size, renderer, scene } =
+const { body, onUpdate, addChild, animation, size, renderer, scene, THREE } =
 	useThree();
 
 function init() {

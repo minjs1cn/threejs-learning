@@ -68,5 +68,6 @@ export function useThree() {
 		onUpdate,
 		renderer,
 		scene,
+		THREE,
 	};
 }

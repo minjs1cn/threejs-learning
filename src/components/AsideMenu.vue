@@ -6,12 +6,19 @@ import { routesWithoutHome } from '../router';
 	<ul class="menu">
 		<router-link
 			custom
-			:to="item.name"
+			:to="{ name: item.name }"
 			v-for="item in routesWithoutHome"
 			:key="item.name"
 			v-slot="{ navigate, isActive }"
 		>
-			<li :class="{ active: isActive }" @click="navigate">{{ item.name }}</li>
+			<li
+				:class="{
+					active: isActive,
+				}"
+				@click="navigate"
+			>
+				{{ item.meta?.title }}
+			</li>
 		</router-link>
 	</ul>
 </template>
