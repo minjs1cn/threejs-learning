@@ -13,7 +13,7 @@ function init() {
 	camera.position.set(0, 200, 10);
 	camera.lookAt(0, 0, 0);
 
-	const geometry = new THREE.PlaneGeometry(100, 100, 20, 20);
+	const geometry = new THREE.PlaneGeometry(100, 10, 20, 2);
 
 	const material = new THREE.ShaderMaterial({
 		uniforms: {
