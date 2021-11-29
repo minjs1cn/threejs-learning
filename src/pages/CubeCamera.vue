@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from '@vue/runtime-core';
-import { useThree } from '../hooks';
+import { useAlphaThree } from '../hooks';
 
 const { body, onUpdate, addChild, animation, size, renderer, scene, THREE } =
-	useThree();
+	useAlphaThree();
 
 function init() {
 	const { width, height } = size;
@@ -34,12 +34,16 @@ function init() {
 	addChild(cubeCamera);
 
 	const chromeMaterial = new THREE.MeshLambertMaterial({
-		color: 0xffffff,
+		color: 0xff5500,
 		envMap: cubeRenderTarget.texture,
 	});
 	const planeGeometry = new THREE.PlaneGeometry(100, 100);
 	const car = new THREE.Mesh(planeGeometry, chromeMaterial);
 	addChild(car);
+
+	const light = new THREE.DirectionalLight(0xff0000, 1);
+	light.lookAt(0, 0, 0);
+	addChild(light);
 
 	// Update the render target cube
 	car.visible = false;

@@ -110,7 +110,7 @@ const onChange = (e: Event) => {
 .canvas {
 	width: 500px;
 	height: 500px;
-	margin: 20px auto;
+	margin: 0 auto;
 }
 
 .buttons {
