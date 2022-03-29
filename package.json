@@ -18,9 +18,11 @@
 	},
 	"dependencies": {
 		"d3-geo": "^3.0.1",
+		"game-greedy-snake": "^0.0.2",
 		"gl-matrix": "^3.4.3",
 		"glsl-noise": "^0.0.0",
 		"glslify": "^7.1.1",
+		"hotkeys-js": "^3.8.7",
 		"three": "^0.134.0",
 		"vue": "^3.2.16",
 		"vue-router": "^4.0.12"
