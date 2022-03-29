@@ -15,7 +15,7 @@ const vertexShader = `
     varying vec4 v_Color;
     varying vec3 fragNormal;
     void main() {
-        gl_Position = projectionMatrix * cameraMatrix * modelViewMatrix * a_Position;
+        gl_Position = projectionMatrix * cameraMatrix * modelViewMatrix * vec4(a_Position.xy * vec2(1, -1), a_Position.z, 1.0);
         v_Color = a_Color;
         fragNormal = a_normal;
     }`;
@@ -106,11 +106,12 @@ function init() {
       const rMatrix = mat4.create();
       const sMatrix = mat4.create();
       const tMatrix = mat4.create();
-      mat4.scale(sMatrix, sMatrix, [1, -1, 0]); // y 翻转
+      // mat4.scale(sMatrix, sMatrix, [1, -1, 0]); // y 翻转
       mat4.rotate(rMatrix, rMatrix, (d * Math.PI) / 180, [1, 1, 0]);
-      // mat4.translate(tMatrix, tMatrix, [-ca!.width / 2, ca!.height / 2, 0]); // 平移
-      mat4.multiply(mMatrix, sMatrix, rMatrix);
+      mat4.translate(tMatrix, tMatrix, [-ca!.width / 2, ca!.height / 2, 0]); // 平移
       mat4.multiply(mMatrix, mMatrix, tMatrix);
+      mat4.multiply(mMatrix, mMatrix, rMatrix);
+      mat4.multiply(mMatrix, mMatrix, sMatrix);
 
       var normalMatrix = mat4.create();
       mat4.invert(normalMatrix, mMatrix);
@@ -142,9 +143,9 @@ function init() {
 }
 
 function initBuffer(webgl: WebGLRenderingContext, program: WebGLProgram) {
-  const w = canvas.value!.width / 2;
-  const h = canvas.value!.height / 2;
-  const d = 300;
+  const w = canvas.value!.width / 4;
+  const h = canvas.value!.height / 4;
+  const d = 200;
   // 正方体的八个顶点
   var vertexData = new Float32Array([
     //顶点坐标颜色
