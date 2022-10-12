@@ -1,6 +1,53 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 
+type PolygonOptions = {
+  gl: WebGLRenderingContext;
+  program: WebGLProgram;
+  source: number[];
+  sourceSize: number;
+  attributes: Record<string, { size: number; index: number; }>;
+};
+
+class Polygon {
+  private bytesSize: number = 0;
+
+  constructor (public options: PolygonOptions) {
+    this.init();
+  }
+
+  private init() {
+    const { gl, source, } = this.options;
+    const bufferSource = new Float32Array(source);
+    this.bytesSize = bufferSource.BYTES_PER_ELEMENT;
+    const vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, bufferSource, gl.STATIC_DRAW);
+    this.update();
+  }
+
+  update() {
+    this.updateAttribute();
+  }
+
+  private updateAttribute() {
+    const { gl, program, sourceSize, attributes } = this.options;
+    const bytesSize = this.bytesSize;
+    const stride = sourceSize * bytesSize;
+    for (const key in attributes) {
+      const { size, index } = attributes[key];
+      const attr = gl.getAttribLocation(program, key);
+      gl.vertexAttribPointer(attr, size, gl.FLOAT, false, stride, index * bytesSize);
+      gl.enableVertexAttribArray(attr);
+    }
+  }
+
+  draw(type: 'POINTS' | 'TRIANGLES' = 'POINTS') {
+    const { gl, sourceSize } = this.options;
+    gl.drawArrays(gl[type], 0, sourceSize);
+  }
+}
+
 function init() {
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
   canvas.width = canvas.parentElement!.clientWidth;
@@ -12,41 +59,60 @@ function init() {
 
   const vertexShaderSource = `
   attribute vec4 a_Position;
+  attribute vec4 a_Color;
+  attribute float a_PointSize;
+  varying vec4 v_Color;
   void main(){
     gl_Position = a_Position;
-    gl_PointSize = 50.0;
+    gl_PointSize = a_PointSize;
+    v_Color = a_Color;
   }
   `;
 
   const fragmentShaderSource = `
+  precision mediump float;
+  varying vec4 v_Color;
   void main(){
-    gl_FragColor = vec4(1, 0, 0, 1);
+    gl_FragColor = v_Color;
   }
   `;
+
+  const source = [
+    0.0, 0.0, 1.0, 0.0, 0.0, 5.0,
+    0.5, 0.0, 0.0, 1.0, 0.0, 5.0,
+    0.5, 0.5, 0.0, 0.0, 1.0, 5.0,
+
+    0.0, 0.0, 1.0, 0.0, 0.0, 5.0,
+    0.5, 0.5, 0.0, 0.0, 1.0, 5.0,
+    0.0, 0.5, 0.0, 0.0, 1.0, 5.0,
+  ];
 
 
   try {
     const program = initShaders(gl, vertexShaderSource, fragmentShaderSource);
-    const a_Position = gl.getAttribLocation(program, 'a_Position');
 
-    const points: { x: number; y: number; }[] = [];
-
-    canvas.addEventListener('click', e => {
-      console.log(e.offsetX);
-      const { offsetX, offsetY } = e;
-      const [x, y] = getPosition(offsetX, offsetY, e.target as HTMLElement);
-      points.push({
-        x,
-        y,
-      });
-
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      points.forEach(({ x, y }) => {
-        gl.vertexAttrib2f(a_Position, x, y);
-        gl.drawArrays(gl.POINTS, 0, 1);
-      });
-      gl.drawArrays(gl.POINTS, 0, 1);
+    const polygon = new Polygon({
+      gl,
+      program,
+      source,
+      sourceSize: 6,
+      attributes: {
+        a_Position: {
+          size: 2,
+          index: 0,
+        },
+        a_Color: {
+          size: 3,
+          index: 2,
+        },
+        a_PointSize: {
+          size: 1,
+          index: 5,
+        },
+      }
     });
+
+    polygon.draw('TRIANGLES');
   } catch (error) {
     console.log(error);
   }

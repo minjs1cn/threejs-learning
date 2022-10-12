@@ -1,54 +1,52 @@
-<!-- @format -->
-
 <script setup lang="ts">
-	import { onMounted } from '@vue/runtime-core';
-	import { useThree } from '../hooks';
-	import { OrbitControls } from '../utils';
+import { onMounted } from '@vue/runtime-core';
+import { useThree } from '../hooks';
+import { OrbitControls } from '../utils';
 
-	const { body, onUpdate, addChild, animation, size, THREE, renderer } =
-		useThree();
+const { body, onUpdate, addChild, animation, size, THREE, renderer } =
+	useThree();
 
-	function init() {
-		const { width, height } = size;
+function init() {
+	const { width, height } = size;
 
-		// 相机
-		const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-		addChild(camera);
+	// 相机
+	const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+	addChild(camera);
 
-		camera.position.set(0, 0, 5);
-		camera.lookAt(0, 0, 0);
+	camera.position.set(0, 0, 5);
+	camera.lookAt(0, 0, 0);
 
-		// 创建控制器
-		const controls = new OrbitControls(camera, renderer.domElement);
-		// controls.enableDamping = true;
-		// controls.dampingFactor = 0.25;
-		// controls.rotateSpeed = 0.35;
+	// 创建控制器
+	const controls = new OrbitControls(camera, renderer.domElement);
+	// controls.enableDamping = true;
+	// controls.dampingFactor = 0.25;
+	// controls.rotateSpeed = 0.35;
 
-		const geometry = new THREE.SphereGeometry(1, 32, 16);
+	const geometry = new THREE.SphereGeometry(1, 32, 16);
 
-		const circleGeometry = new THREE.CircleGeometry(1, 32);
-		const base = new THREE.IcosahedronGeometry(1, 1);
-		console.log(base);
-		const { array, count, itemSize } = base.attributes.position;
-		const points: THREE.Vector3[] = [];
-		for (let i = 0; i < count * itemSize; i += itemSize) {
-			// const mesh = new THREE.Mesh(
-			// 	circleGeometry,
-			// 	new THREE.MeshBasicMaterial({
-			// 		color: '#fff',
-			// 		side: THREE.BackSide,
-			// 	}),
-			// );
-			// mesh.position.copy(
-			// 	new THREE.Vector3(array[i], array[i + 1], array[i + 2]),
-			// );
-			// mesh.scale.set(0.25, 0.25, 0.25);
-			// mesh.lookAt(0, 0, 0);
-			// addChild(mesh);
-			points.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
-		}
+	const circleGeometry = new THREE.CircleGeometry(1, 32);
+	const base = new THREE.IcosahedronGeometry(1, 1);
+	console.log(base);
+	const { array, count, itemSize } = base.attributes.position;
+	const points: THREE.Vector3[] = [];
+	for (let i = 0; i < count * itemSize; i += itemSize) {
+		// const mesh = new THREE.Mesh(
+		// 	circleGeometry,
+		// 	new THREE.MeshBasicMaterial({
+		// 		color: '#fff',
+		// 		side: THREE.BackSide,
+		// 	}),
+		// );
+		// mesh.position.copy(
+		// 	new THREE.Vector3(array[i], array[i + 1], array[i + 2]),
+		// );
+		// mesh.scale.set(0.25, 0.25, 0.25);
+		// mesh.lookAt(0, 0, 0);
+		// addChild(mesh);
+		points.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
+	}
 
-		const vertexShader = /* glsl */ `
+	const vertexShader = /* glsl */ `
 			varying vec2 vUv;
 			varying vec3 vPosition;
 			void main() {
@@ -58,7 +56,7 @@
 			}
 		`;
 
-		const fragmentShader = /* glsl */ `
+	const fragmentShader = /* glsl */ `
 			varying vec2 vUv;
 			varying vec3 vPosition;
 			uniform vec3 color;
@@ -86,45 +84,45 @@
 			}
 		`;
 
-		const material = new THREE.ShaderMaterial({
-			uniforms: {
-				color: {
-					value: new THREE.Color('#f00'),
-				},
-				time: {
-					value: 0,
-				},
-				points: {
-					value: points,
-				},
+	const material = new THREE.ShaderMaterial({
+		uniforms: {
+			color: {
+				value: new THREE.Color('#f00'),
 			},
-			defines: {
-				POINT_COUNT: points.length,
+			time: {
+				value: 0,
 			},
-			vertexShader,
-			fragmentShader,
-			vertexColors: true,
-		});
-
-		// 展示网格
-		// material.wireframe = true;
-
-		const box = new THREE.Mesh(geometry, material);
-		addChild(box);
-
-		onUpdate(t => {
-			material.uniforms.time.value += 0.01;
-			// plane.rotation.x += 0.01;
-			// plane.rotation.y += 0.01;
-			// material.uniforms['timestamp'].value = t;
-		});
-
-		animation();
-	}
-
-	onMounted(() => {
-		init();
+			points: {
+				value: points,
+			},
+		},
+		defines: {
+			POINT_COUNT: points.length,
+		},
+		vertexShader,
+		fragmentShader,
+		vertexColors: true,
 	});
+
+	// 展示网格
+	// material.wireframe = true;
+
+	const box = new THREE.Mesh(geometry, material);
+	addChild(box);
+
+	onUpdate(t => {
+		// material.uniforms.time.value += 0.01;
+		// plane.rotation.x += 0.01;
+		// plane.rotation.y += 0.01;
+		// material.uniforms['timestamp'].value = t;
+	});
+
+	animation();
+}
+
+onMounted(() => {
+	init();
+});
 </script>
 <template>
 	<div class="scene" ref="body"></div>

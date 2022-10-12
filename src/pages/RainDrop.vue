@@ -47,12 +47,12 @@ function init() {
 	});
 
 	const clouds: THREE.Mesh[] = [];
-	for (let i = 0; i < 30; i++) {
+	for (let i = 0; i < 50; i++) {
 		const cloud = new THREE.Mesh(geometry, material);
 		cloud.material.opacity = 0.6;
 		clouds.push(cloud);
 		cloud.position.set(
-			Math.random() * 1000 - 460,
+			Math.random() * 1000 - 400,
 			600,
 			Math.random() * 500 - 400,
 		);
@@ -123,4 +123,6 @@ onMounted(() => {
 	<div class="scene" ref="body"></div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

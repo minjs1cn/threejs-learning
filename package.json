@@ -1,38 +1,38 @@
 {
-	"name": "threejs-learning",
-	"version": "0.0.0",
-	"description": "three.js learning",
-	"keywords": [
-		"three"
-	],
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/minjs1cn/threejs-learning/"
-	},
-	"homepage": "https://minjs1cn.github.io/threejs-learning/index.html",
-	"scripts": {
-		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build",
-		"serve": "vite preview"
-	},
-	"dependencies": {
-		"d3-geo": "^3.0.1",
-		"game-greedy-snake": "^0.0.2",
-		"gl-matrix": "^3.4.3",
-		"glsl-noise": "^0.0.0",
-		"glslify": "^7.1.1",
-		"hotkeys-js": "^3.8.7",
-		"three": "^0.134.0",
-		"vue": "^3.2.16",
-		"vue-router": "^4.0.12"
-	},
-	"devDependencies": {
-		"@types/d3-geo": "^3.0.2",
-		"@types/three": "^0.134.0",
-		"@vitejs/plugin-vue": "^1.9.3",
-		"typescript": "^4.4.3",
-		"vite": "^2.6.4",
-		"vue-tsc": "^0.3.0"
-	}
+  "name": "threejs-learning",
+  "version": "0.0.0",
+  "description": "three.js learning",
+  "keywords": [
+    "three"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minjs1cn/threejs-learning/"
+  },
+  "homepage": "https://minjs1cn.github.io/threejs-learning/index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "d3-geo": "^3.0.1",
+    "game-greedy-snake": "^0.0.2",
+    "gl-matrix": "^3.4.3",
+    "glsl-noise": "^0.0.0",
+    "glslify": "^7.1.1",
+    "hotkeys-js": "^3.8.7",
+    "three": "^0.134.0",
+    "vue": "^3.2.16",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/d3-geo": "^3.0.2",
+    "@types/three": "^0.134.0",
+    "@vitejs/plugin-vue": "^1.9.3",
+    "typescript": "^4.4.3",
+    "vite": "^2.6.4",
+    "vue-tsc": "^1.0.3"
+  }
 }
