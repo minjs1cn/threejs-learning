@@ -136,7 +136,9 @@ function init() {
     //   f = 1.0 - f;
     // }
     // f = step(0.5,f);
+    f *= atan(gl_FragCoord.y / gl_FragCoord.x) * 100000.0;
     // f = fract(f);
+
 
     gl_FragColor = vec4(vec3(f), 1);
   }
